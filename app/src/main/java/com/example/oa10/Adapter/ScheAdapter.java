@@ -7,23 +7,18 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.oa10.Beans.NewsBeans;
 import com.example.oa10.R;
 import com.example.oa10.entity.News;
+import com.example.oa10.entity.Schedule;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by asus on 2018/12/28.
- */
-
-public class NewsAdapter extends BaseAdapter {
-    private List<News.NewsBean> list;
+public class ScheAdapter extends BaseAdapter {
+    private List<Schedule.ScheduleBean> list;
     private Context context;
 
     //通过构造方法接受要显示的新闻数据集合
-    public NewsAdapter(Context context, List<News.NewsBean> list) {
+    public ScheAdapter(Context context, List<Schedule.ScheduleBean> list) {
         this.list = list;
         this.context = context;
     }
@@ -52,7 +47,7 @@ public class NewsAdapter extends BaseAdapter {
         }else {
             //方法一：推荐
             //context:上下文, resource:要转换成view对象的layout的id, root:将layout用root(ViewGroup)包一层作为codify的返回值,一般传null
-            view = View.inflate(context, R.layout.item_news_layout, null);//将一个布局文件转换成一个view对象
+            view = View.inflate(context, R.layout.item_sche, null);//将一个布局文件转换成一个view对象
 
             //方法二
             //通过LayoutInflater将布局转换成view对象
@@ -65,15 +60,17 @@ public class NewsAdapter extends BaseAdapter {
 
         }
         //2.获取view上的子控件对象
-        ImageView item_img_icon = (ImageView) view.findViewById(R.id.item_img_icon);
+
         TextView item_tv_des = (TextView) view.findViewById(R.id.item_tv_des);
-        TextView item_tv_title = (TextView) view.findViewById(R.id.item_tv_title);
+        TextView item_tv_time = (TextView) view.findViewById(R.id.item_tv_time);
         //3.获取postion位置条目对应的list集合中的新闻数据，Bean对象
-        News.NewsBean newsBean = list.get(position);
+        Schedule.ScheduleBean scheduleBean = list.get(position);
         //4.将数据设置给这些子控件做显示
         //item_img_icon.setImageDrawable(newsBean.icon);//设置imageView的图片
-        item_tv_title.setText(newsBean.getNews_title());
-        item_tv_des.setText(newsBean.getNews_time());
+        String str=scheduleBean.getSche_time();
+        str = str.substring(0,10);
+        item_tv_time.setText(str);
+        item_tv_des.setText(scheduleBean.getSche_content());
 
         return view;
     }

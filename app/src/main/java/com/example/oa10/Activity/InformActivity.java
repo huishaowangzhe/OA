@@ -22,7 +22,6 @@ public class InformActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inform);
 
-        getSupportActionBar().hide();//隐藏掉整个ActionBar
 
         //初始化视图
         inform_initViews();

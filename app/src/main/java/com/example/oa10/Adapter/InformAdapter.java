@@ -12,7 +12,7 @@ import com.example.oa10.Fragment.FragmentNotice;
  */
 
 public class InformAdapter extends FragmentPagerAdapter {
-    private String[] inform_Titles = new String[]{"通知","公告"};
+    private String[] inform_Titles = new String[]{"公告","通知"};
 
     public InformAdapter(FragmentManager fm) {
         super(fm);
@@ -22,6 +22,8 @@ public class InformAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         if (position == 1) {
             return new FragmentNotice();
+        }else if(position==0){
+            return new FragmentAnnouncement();
         }
         return new FragmentAnnouncement();
     }

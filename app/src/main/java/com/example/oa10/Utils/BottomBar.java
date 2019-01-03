@@ -2,6 +2,7 @@ package com.example.oa10.Utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.oa10.Activity.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +100,7 @@ public class BottomBar extends View {
         titleList.add(title);
         iconResBeforeList.add(iconResBefore);
         iconResAfterList.add(iconResAfter);
+
         return this;
     }
 

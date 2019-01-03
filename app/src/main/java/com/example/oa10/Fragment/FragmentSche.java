@@ -1,11 +1,12 @@
 package com.example.oa10.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.support.v4.app.Fragment;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.oa10.Activity.DetailActivity;
+import com.example.oa10.Activity.LoginActivity;
 import com.example.oa10.Adapter.NewsAdapter;
-import com.example.oa10.Beans.NewsBeans;
+import com.example.oa10.Adapter.ScheAdapter;
+import com.example.oa10.MainActivity;
 import com.example.oa10.R;
-import com.example.oa10.Utils.NewsUtils;
+import com.example.oa10.Utils.LoginFlag;
 import com.example.oa10.entity.Announcement;
 import com.example.oa10.entity.News;
 import com.example.oa10.entity.Notice;
@@ -26,26 +28,15 @@ import com.example.oa10.entity.Schedule;
 import com.example.oa10.presenter.MyPresenter;
 import com.example.oa10.view.MVPView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Created by asus on 2018/12/26.
- */
-
-public class FragementNews extends Fragment implements AdapterView.OnItemClickListener{
-
+public class FragmentSche extends Fragment implements AdapterView.OnItemClickListener {
     private View view;
     private Context mContext;
     private MyPresenter myPresenter;
-    private NewsAdapter newsAdapter;
+    private ScheAdapter scheAdapter;
     private ListView lv_news;
-    private MVPView mvpView =new MVPView() {
+    private MVPView mvpView = new MVPView() {
         @Override
         public void onSuccess_news(News news) {
-            //Log.e("dsdss",news.toString());
-            newsAdapter = new NewsAdapter(mContext, news.getNews());
-            lv_news.setAdapter(newsAdapter);
 
         }
 
@@ -67,52 +58,53 @@ public class FragementNews extends Fragment implements AdapterView.OnItemClickLi
         @Override
         public void onSuccess_schedule(Schedule schedule) {
 
+            scheAdapter = new ScheAdapter(mContext,schedule.getSchedule());
+            lv_news.setAdapter(scheAdapter);
+            scheAdapter.notifyDataSetChanged();
         }
-
 
         @Override
         public void onError() {
 
         }
-    } ;
+    };
+
+    private String type=null;
+    public static FragmentSche getInstance(){
+        FragmentSche fragmentSche = new FragmentSche();
+
+
+        return fragmentSche;
+    }
+    public void setType(String type){
+        this.type = type;
+    }
+
+    private LoginFlag loginFlag;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragmentnews, container, false);
-
         mContext=getContext();
         myPresenter=MyPresenter.getInstance(mContext);
-
         myPresenter.onCreate();
         myPresenter.attachView(mvpView);
-        //1.获取新闻数据用list封装
-        ArrayList<NewsBeans> allNews = NewsUtils.getAllNews(mContext);
-        //2.找到控件
         lv_news = (ListView) view.findViewById(R.id.lv_news);
-        //3.创建一个adapter设置给listview
 
-        //4.设置listview条目的点击事件
         lv_news.setOnItemClickListener(this);
+        Log.e("type",type);
+        loginFlag = LoginFlag.getInstance();
+        if(loginFlag.getResultBean()!=null){
+            myPresenter.getSche(type,loginFlag.getResultBean().getUserEntity().getUser_id());
+        }
 
-        myPresenter.getAllNews();
 
         return view;
     }
 
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        News.NewsBean newsBean=(News.NewsBean)newsAdapter.getItem(position);
-
-        Intent intent = new Intent(mContext, DetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("content",newsBean.getNews_content());
-        intent.putExtras(bundle);
-        startActivity(intent);
 
     }
-
-
 }

@@ -8,24 +8,35 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.oa10.Activity.InformActivity;
 import com.example.oa10.Activity.LogActivity;
+import com.example.oa10.Activity.LoginActivity;
 import com.example.oa10.Activity.PhoneContentActivity;
+import com.example.oa10.Activity.StickyActivity;
 import com.example.oa10.Fragment.FragementNews;
 import com.example.oa10.Fragment.FragmentSchedule;
 import com.example.oa10.Fragment.Fragmentabout;
 import com.example.oa10.Utils.BottomBar;
+import com.example.oa10.Utils.LoginFlag;
+import com.example.oa10.presenter.MyPresenter;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private LoginFlag loginFlag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loginFlag = LoginFlag.getInstance();
+        Intent intent_login = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent_login);
+        MyPresenter myPresenter= MyPresenter.getInstance(getApplicationContext());
         //找到抽屉控件
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         //找到导航栏并实现跳转功能
@@ -48,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         //对抽屉实现监听
-        mNavigationView.setCheckedItem(R.id.nav_log);//设置默认选中的图标
+        mNavigationView.setCheckedItem(R.id.nav_login);//设置默认选中的图标
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -56,8 +67,17 @@ public class MainActivity extends AppCompatActivity {
                 //mDrawerLayout.closeDrawers();
 
                 switch(item.getItemId()){
+                    case R.id.nav_login://用户登录
+                        if(loginFlag.getResultBean()==null){
+                            Intent intent_login = new Intent(MainActivity.this, LoginActivity.class);
+                            startActivity(intent_login);
+                        }else {
+                            Toast.makeText(getApplicationContext(),"已经登录",Toast.LENGTH_LONG).show();
+                        }
+
+                        break;
                     case R.id.nav_log://工作日志
-                        Log.e("nav_log","jjjjjjj");
+
                         Intent intent_log = new Intent(MainActivity.this, LogActivity.class);
                         startActivity(intent_log);
                         break;
@@ -67,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_sticky://便利贴
                         Log.e("nav_sticky","jjjjjjj");
+                        Intent intent_stickt = new Intent(MainActivity.this, StickyActivity.class);
+                        startActivity(intent_stickt);
                         break;
                     case R.id.nav_telephone://通讯录
                         Log.e("nav_telephone","jjjjjjj");

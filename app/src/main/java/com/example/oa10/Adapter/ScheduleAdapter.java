@@ -3,6 +3,7 @@ package com.example.oa10.Adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
 
 import com.example.oa10.Fragment.FragmentHistory;
 import com.example.oa10.Fragment.FragmentToday;
@@ -39,4 +40,8 @@ public class ScheduleAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return mTitles[position];
     }
+
+    @Override
+    public boolean isViewFromObject(View view, Object object) { return view ==((Fragment) object).getView();}
+
 }

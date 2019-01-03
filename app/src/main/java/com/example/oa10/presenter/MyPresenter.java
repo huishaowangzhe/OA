@@ -6,7 +6,11 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
+import com.example.oa10.entity.Announcement;
 import com.example.oa10.entity.News;
+import com.example.oa10.entity.Notice;
+import com.example.oa10.entity.ResultBean;
+import com.example.oa10.entity.Schedule;
 import com.example.oa10.manager.DataManager;
 import com.example.oa10.view.MVPView;
 
@@ -25,17 +29,31 @@ import rx.subscriptions.CompositeSubscription;
 public class MyPresenter implements Presenter {
     private DataManager manager;
     private CompositeSubscription mCompositeSubscription;
-    private Context mContext;
+    private static Context mContext = null;
     private MVPView newView;
     //private ArticleView articleView;
     private News myNews;
+    private Announcement announcements;
+    private Notice notices;
+    private ResultBean resultBean;
+    private Schedule schedule;
     //private Article article;
     //private Theme theme;
 
+    public static MyPresenter myPresenter = null;
 
-    public MyPresenter (Context mContext){
-        this.mContext = mContext;
+    public static MyPresenter getInstance(Context Context){
+        if(mContext==null){
+            mContext = Context;
+        }
+
+        if(myPresenter==null){
+            myPresenter = new MyPresenter();
+        }
+        return myPresenter;
     }
+
+
     @Override
     public void onCreate() {
         manager = new DataManager(mContext);
@@ -68,27 +86,6 @@ public class MyPresenter implements Presenter {
 
     }
     public void getAllNews(){
-
-
-        /**
-        String weatherUrl="http://219.231.12.16:8080/news";
-        //System.out.println(weatherUrl);
-        HttpUtil.sendHttpRequest(weatherUrl, new HttpCallbackListener() {
-            public void onFinish(String response) {
-
-                Log.e("wws",response);
-                //dealResponse(response);
-                //Message message1=new Message();
-                //message1.what=SHOW_RESPONSE;
-                //handler.sendMessage(message1);
-            }
-            public void onError(Exception e) {
-                Log.e("error","访问失败");
-            }
-        });
-
-         **/
-
         mCompositeSubscription.add(manager.getAllNews()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -115,9 +112,124 @@ public class MyPresenter implements Presenter {
 
                 })
         );
-
-
-
     }
+
+    public void getSche(String type,String user_id){
+        mCompositeSubscription.add(manager.getSche(type,user_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Schedule>() {
+                    @Override
+                    public void onCompleted() {
+                        if (schedule != null){
+                            //newView.stopRefreshing();
+
+                            newView.onSuccess_schedule(schedule);
+                        }
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        newView.onError();
+                        Log.e("erroe","a");
+                    }
+
+                    @Override
+                    public void onNext(Schedule schedule1) {
+                        schedule = schedule1;
+                    }
+
+
+                })
+        );
+    }
+    public void getAnno(){
+        mCompositeSubscription.add(manager.getAnno()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Announcement>() {
+                    @Override
+                    public void onCompleted() {
+
+                        if (announcements != null){
+                            //newView.stopRefreshing();
+
+
+                            newView.onSuccess_announcement(announcements);
+                        }
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        newView.onError();
+                        Log.e("erroe","a");
+                    }
+                    @Override
+                    public void onNext(Announcement announcement1) {
+
+                        announcements = announcement1;
+                    }
+
+                })
+        );
+    }
+    public void getNotice(){
+        mCompositeSubscription.add(manager.getNotice()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Notice>() {
+                    @Override
+                    public void onCompleted() {
+                        if (notices != null){
+                            //newView.stopRefreshing();
+
+                            newView.onSuccess_notice(notices);
+                        }
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        newView.onError();
+                        Log.e("erroe","a");
+                    }
+                    @Override
+                    public void onNext(Notice notice1) {
+
+                        notices = notice1;
+                    }
+
+                })
+        );
+    }
+    public void login(String user_id,String user_pass){
+        mCompositeSubscription.add(manager.login(user_id,user_pass)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResultBean>() {
+                    @Override
+                    public void onCompleted() {
+                        if (resultBean != null){
+                            //newView.stopRefreshing();
+
+                            Log.e("login",resultBean.toString());
+                            newView.onSuccess_login(resultBean);
+                        }
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        newView.onError();
+                        Log.e("erroe","a");
+                    }
+                    @Override
+                    public void onNext(ResultBean ne) {
+
+                        resultBean = ne;
+                    }
+
+                })
+        );
+    }
+
 
 }

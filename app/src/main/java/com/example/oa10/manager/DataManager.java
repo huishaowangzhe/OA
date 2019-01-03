@@ -6,7 +6,11 @@ import android.util.Log;
 
 import com.example.oa10.Utils.RetrofitHelper;
 import com.example.oa10.Utils.RetrofitService;
+import com.example.oa10.entity.Announcement;
 import com.example.oa10.entity.News;
+import com.example.oa10.entity.Notice;
+import com.example.oa10.entity.ResultBean;
+import com.example.oa10.entity.Schedule;
 
 
 import java.util.List;
@@ -24,10 +28,21 @@ public class DataManager {
         this.mRetrofitService = RetrofitHelper.getInstance(context).getServer();
     }
     public Observable<News> getAllNews(){
-        Log.e("dsdss","1");
         return  mRetrofitService.getAllNews();
     }
 
+    public Observable<Announcement> getAnno(){ return  mRetrofitService.getAnno(); }
+
+    public Observable<Notice> getNotice(){
+        return  mRetrofitService.getNotice();
+    }
+
+    public Observable<Schedule> getSche(String type,String user_id){
+        return  mRetrofitService.getSche(type,user_id);
+    }
+
+
+    public Observable<ResultBean> login(String user_id,String user_pass){ return  mRetrofitService.login(user_id,user_pass); }
 
 
 }
