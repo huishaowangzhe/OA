@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-
-import com.example.oa10.entity.Announcement;
+import com.example.oa10.entity.Inform;
 import com.example.oa10.entity.News;
-import com.example.oa10.entity.Notice;
 import com.example.oa10.entity.ResultBean;
 import com.example.oa10.entity.Schedule;
 import com.example.oa10.manager.DataManager;
@@ -33,13 +31,12 @@ public class MyPresenter implements Presenter {
     private MVPView newView;
     //private ArticleView articleView;
     private News myNews;
-    private Announcement announcements;
-    private Notice notices;
     private ResultBean resultBean;
     private Schedule schedule;
     //private Article article;
     //private Theme theme;
 
+    /**
     public static MyPresenter myPresenter = null;
 
     public static MyPresenter getInstance(Context Context){
@@ -53,6 +50,12 @@ public class MyPresenter implements Presenter {
         return myPresenter;
     }
 
+     **/
+
+    public MyPresenter(Context context) {
+        this.mContext=context;
+        onCreate();
+    }
 
     @Override
     public void onCreate() {
@@ -143,6 +146,38 @@ public class MyPresenter implements Presenter {
                 })
         );
     }
+
+    Inform inform;
+    public void getInform(){
+        mCompositeSubscription.add(manager.getInform()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Inform>() {
+                    @Override
+                    public void onCompleted() {
+
+                        if (inform != null){
+                            //newView.stopRefreshing();
+
+                            newView.onSuccess_inform(inform);
+                        }
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        newView.onError();
+                        Log.e("erroe","a");
+                    }
+                    @Override
+                    public void onNext(Inform inform1) {
+
+                        inform=inform1;
+                    }
+
+                })
+        );
+    }
+    /**
     public void getAnno(){
         mCompositeSubscription.add(manager.getAnno()
                 .subscribeOn(Schedulers.io())
@@ -153,7 +188,6 @@ public class MyPresenter implements Presenter {
 
                         if (announcements != null){
                             //newView.stopRefreshing();
-
 
                             newView.onSuccess_announcement(announcements);
                         }
@@ -201,6 +235,7 @@ public class MyPresenter implements Presenter {
                 })
         );
     }
+     **/
     public void login(String user_id,String user_pass){
         mCompositeSubscription.add(manager.login(user_id,user_pass)
                 .subscribeOn(Schedulers.io())

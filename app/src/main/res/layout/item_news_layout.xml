@@ -6,12 +6,17 @@
               android:paddingBottom="20dp"
               android:orientation="horizontal" >
 
+    <View
+        android:layout_width="10dp"
+        android:layout_height="match_parent"/>
+
     <ImageView
-        android:layout_gravity="center"
         android:id="@+id/item_img_icon"
         android:layout_width="68dp"
         android:layout_height="68dp"
+        android:layout_gravity="center"
         android:layout_marginRight="10dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/about" />
 
     <LinearLayout

@@ -6,9 +6,8 @@ import android.util.Log;
 
 import com.example.oa10.Utils.RetrofitHelper;
 import com.example.oa10.Utils.RetrofitService;
-import com.example.oa10.entity.Announcement;
+import com.example.oa10.entity.Inform;
 import com.example.oa10.entity.News;
-import com.example.oa10.entity.Notice;
 import com.example.oa10.entity.ResultBean;
 import com.example.oa10.entity.Schedule;
 
@@ -31,11 +30,11 @@ public class DataManager {
         return  mRetrofitService.getAllNews();
     }
 
-    public Observable<Announcement> getAnno(){ return  mRetrofitService.getAnno(); }
+    //public Observable<Announcement> getAnno(){ return  mRetrofitService.getAnno(); }
 
-    public Observable<Notice> getNotice(){
-        return  mRetrofitService.getNotice();
-    }
+    //public Observable<Notice> getNotice(){return  mRetrofitService.getNotice();}
+
+    public Observable<Inform> getInform(){ return  mRetrofitService.getInform(); }
 
     public Observable<Schedule> getSche(String type,String user_id){
         return  mRetrofitService.getSche(type,user_id);

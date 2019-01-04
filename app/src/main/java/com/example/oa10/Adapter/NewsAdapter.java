@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.oa10.Beans.NewsBeans;
 import com.example.oa10.R;
 import com.example.oa10.entity.News;
@@ -66,6 +67,7 @@ public class NewsAdapter extends BaseAdapter {
         }
         //2.获取view上的子控件对象
         ImageView item_img_icon = (ImageView) view.findViewById(R.id.item_img_icon);
+
         TextView item_tv_des = (TextView) view.findViewById(R.id.item_tv_des);
         TextView item_tv_title = (TextView) view.findViewById(R.id.item_tv_title);
         //3.获取postion位置条目对应的list集合中的新闻数据，Bean对象
@@ -74,7 +76,9 @@ public class NewsAdapter extends BaseAdapter {
         //item_img_icon.setImageDrawable(newsBean.icon);//设置imageView的图片
         item_tv_title.setText(newsBean.getNews_title());
         item_tv_des.setText(newsBean.getNews_time());
-
+        Glide.with(context)
+                .load(newsBean.getNews_icon())
+                .into(item_img_icon);
         return view;
     }
 }

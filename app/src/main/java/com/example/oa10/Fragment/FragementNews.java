@@ -18,9 +18,8 @@ import com.example.oa10.Adapter.NewsAdapter;
 import com.example.oa10.Beans.NewsBeans;
 import com.example.oa10.R;
 import com.example.oa10.Utils.NewsUtils;
-import com.example.oa10.entity.Announcement;
+import com.example.oa10.entity.Inform;
 import com.example.oa10.entity.News;
-import com.example.oa10.entity.Notice;
 import com.example.oa10.entity.ResultBean;
 import com.example.oa10.entity.Schedule;
 import com.example.oa10.presenter.MyPresenter;
@@ -46,30 +45,20 @@ public class FragementNews extends Fragment implements AdapterView.OnItemClickLi
             //Log.e("dsdss",news.toString());
             newsAdapter = new NewsAdapter(mContext, news.getNews());
             lv_news.setAdapter(newsAdapter);
-
         }
-
         @Override
         public void onSuccess_login(ResultBean resultBean) {
 
         }
 
         @Override
-        public void onSuccess_announcement(Announcement announcement) {
+        public void onSuccess_inform(Inform inform) {
 
         }
-
-        @Override
-        public void onSuccess_notice(Notice notice) {
-
-        }
-
         @Override
         public void onSuccess_schedule(Schedule schedule) {
 
         }
-
-
         @Override
         public void onError() {
 
@@ -82,21 +71,13 @@ public class FragementNews extends Fragment implements AdapterView.OnItemClickLi
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragmentnews, container, false);
 
         mContext=getContext();
-        myPresenter=MyPresenter.getInstance(mContext);
-
-        myPresenter.onCreate();
+        //myPresenter=MyPresenter.getInstance(mContext);
+        myPresenter= new MyPresenter(mContext);
         myPresenter.attachView(mvpView);
-        //1.获取新闻数据用list封装
         ArrayList<NewsBeans> allNews = NewsUtils.getAllNews(mContext);
-        //2.找到控件
         lv_news = (ListView) view.findViewById(R.id.lv_news);
-        //3.创建一个adapter设置给listview
-
-        //4.设置listview条目的点击事件
         lv_news.setOnItemClickListener(this);
-
         myPresenter.getAllNews();
-
         return view;
     }
 

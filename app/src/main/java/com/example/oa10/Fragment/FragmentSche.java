@@ -20,9 +20,8 @@ import com.example.oa10.Adapter.ScheAdapter;
 import com.example.oa10.MainActivity;
 import com.example.oa10.R;
 import com.example.oa10.Utils.LoginFlag;
-import com.example.oa10.entity.Announcement;
+import com.example.oa10.entity.Inform;
 import com.example.oa10.entity.News;
-import com.example.oa10.entity.Notice;
 import com.example.oa10.entity.ResultBean;
 import com.example.oa10.entity.Schedule;
 import com.example.oa10.presenter.MyPresenter;
@@ -46,14 +45,10 @@ public class FragmentSche extends Fragment implements AdapterView.OnItemClickLis
         }
 
         @Override
-        public void onSuccess_announcement(Announcement announcement) {
+        public void onSuccess_inform(Inform inform) {
 
         }
 
-        @Override
-        public void onSuccess_notice(Notice notice) {
-
-        }
 
         @Override
         public void onSuccess_schedule(Schedule schedule) {
@@ -87,8 +82,7 @@ public class FragmentSche extends Fragment implements AdapterView.OnItemClickLis
                              @Nullable Bundle savedInstanceState) {
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragmentnews, container, false);
         mContext=getContext();
-        myPresenter=MyPresenter.getInstance(mContext);
-        myPresenter.onCreate();
+        myPresenter=new MyPresenter(mContext);
         myPresenter.attachView(mvpView);
         lv_news = (ListView) view.findViewById(R.id.lv_news);
 
@@ -98,8 +92,6 @@ public class FragmentSche extends Fragment implements AdapterView.OnItemClickLis
         if(loginFlag.getResultBean()!=null){
             myPresenter.getSche(type,loginFlag.getResultBean().getUserEntity().getUser_id());
         }
-
-
         return view;
     }
 

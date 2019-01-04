@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         loginFlag = LoginFlag.getInstance();
         Intent intent_login = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent_login);
-        MyPresenter myPresenter= MyPresenter.getInstance(getApplicationContext());
         //找到抽屉控件
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         //找到导航栏并实现跳转功能

@@ -1,8 +1,7 @@
 package com.example.oa10.Utils;
 
-import com.example.oa10.entity.Announcement;
+import com.example.oa10.entity.Inform;
 import com.example.oa10.entity.News;
-import com.example.oa10.entity.Notice;
 import com.example.oa10.entity.ResultBean;
 import com.example.oa10.entity.Schedule;
 
@@ -22,10 +21,15 @@ import rx.Observable;
 public interface RetrofitService {
     @GET("news")
     Observable<News> getAllNews();
+    /**
     @GET("announcement")
     Observable<Announcement> getAnno();
     @GET("notice")
     Observable<Notice> getNotice();
+     **/
+
+    @GET("inform")
+    Observable<Inform> getInform();
 
     @GET("schedule")
     Observable<Schedule> getSche(@Query("type") String type,@Query("user_id") String user_id);

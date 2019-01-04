@@ -1,10 +1,14 @@
 package com.example.oa10.Fragment;
 
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,107 +17,83 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.oa10.Activity.DetailActivity;
-import com.example.oa10.Adapter.AnnoAdapter;
 import com.example.oa10.Adapter.NewsAdapter;
+import com.example.oa10.Adapter.RecyclerAdapter;
 import com.example.oa10.Beans.NewsBeans;
 import com.example.oa10.R;
 import com.example.oa10.Utils.LoginFlag;
 import com.example.oa10.Utils.NewsUtils;
-import com.example.oa10.entity.Announcement;
+import com.example.oa10.entity.Inform;
 import com.example.oa10.entity.News;
-import com.example.oa10.entity.Notice;
 import com.example.oa10.entity.ResultBean;
 import com.example.oa10.entity.Schedule;
 import com.example.oa10.presenter.MyPresenter;
 import com.example.oa10.view.MVPView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by asus on 2018/12/30.
  */
 //公告
-public class FragmentAnnouncement extends Fragment implements AdapterView.OnItemClickListener {
+public class FragmentAnnouncement extends Fragment  {
     private View view;
     private Context mContext;
-    private MyPresenter myPresenter;
-    private AnnoAdapter annoAdapter;
-    private ListView lv_news;
-    private MVPView mvpView =new MVPView() {
-        @Override
-        public void onSuccess_news(News news) {
-            //Log.e("dsdss",news.toString());
-            //newsAdapter = new NewsAdapter(mContext, news.getNews());
-            //lv_news.setAdapter(newsAdapter);
+    private RecyclerView recyclerView;
+    private LinearLayoutManager mLayoutManager;
+    private RecyclerAdapter recyclerAdapter;
 
-        }
+    public FragmentAnnouncement() {
+    }
 
-        @Override
-        public void onSuccess_login(ResultBean resultBean) {
+    public void getInstance(Context context){
+        this.mContext = context;
+    }
 
-        }
-
-        @Override
-        public void onSuccess_announcement(Announcement announcement) {
-
-            Log.e("wwwwwwwwwww","wwwww");
-            annoAdapter = new AnnoAdapter(mContext, announcement.getAnnouncement());
-            lv_news.setAdapter(annoAdapter);
-
-        }
-
-        @Override
-        public void onSuccess_notice(Notice notice) {
-
-        }
-
-        @Override
-        public void onSuccess_schedule(Schedule schedule) {
-
-        }
-
-
-        @Override
-        public void onError() {
-
-        }
-    } ;
-    @Nullable
+    List<Inform.AnnouncementBean> list;
+    public void setData(List<Inform.AnnouncementBean> list1){
+        this.list = list1;
+        recyclerAdapter.setmDatas(list1);
+    }
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragmentnews, container, false);
-
-        mContext=getContext();
-        myPresenter=MyPresenter.getInstance(mContext);
-
-        myPresenter.onCreate();
-        myPresenter.attachView(mvpView);
-        //1.获取新闻数据用list封装
-        ArrayList<NewsBeans> allNews = NewsUtils.getAllNews(mContext);
-        //2.找到控件
-        lv_news = (ListView) view.findViewById(R.id.lv_news);
-        //3.创建一个adapter设置给listview
-
-        //4.设置listview条目的点击事件
-        lv_news.setOnItemClickListener(this);
-
-
-        myPresenter.getAnno();
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_anno,null);
+        //mContext=getContext();
+        recyclerView = (RecyclerView)view.findViewById(R.id.recyclerview01);
+        recyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerAdapter=new RecyclerAdapter(mContext);
+        recyclerAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Log.e("item",position+"");
+                Intent intent = new Intent(mContext,DetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("content",list.get(position).getAnno_content());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(recyclerAdapter);
         return view;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Announcement.AnnouncementBean announcementBean=(Announcement.AnnouncementBean) annoAdapter.getItem(position);
+    /**
 
-        Intent intent = new Intent(mContext, DetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("content",announcementBean.getAnno_content());
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
+     @Override
+     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+     Announcement.AnnouncementBean announcementBean=(Announcement.AnnouncementBean) recyclerAdapter.get(position);
+
+     Intent intent = new Intent(mContext, DetailActivity.class);
+     Bundle bundle = new Bundle();
+     bundle.putString("content",announcementBean.getAnno_content());
+     intent.putExtras(bundle);
+     startActivity(intent);
+     }
+     **/
 }

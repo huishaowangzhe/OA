@@ -15,9 +15,8 @@ import android.widget.Toast;
 
 import com.example.oa10.R;
 import com.example.oa10.Utils.LoginFlag;
-import com.example.oa10.entity.Announcement;
+import com.example.oa10.entity.Inform;
 import com.example.oa10.entity.News;
-import com.example.oa10.entity.Notice;
 import com.example.oa10.entity.ResultBean;
 import com.example.oa10.entity.Schedule;
 import com.example.oa10.presenter.MyPresenter;
@@ -43,7 +42,7 @@ public class LoginActivity extends AppCompatActivity implements MVPView,View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        myPresenter=MyPresenter.getInstance(getApplicationContext());
+        myPresenter=new MyPresenter(getApplicationContext());
         myPresenter.attachView(this);
 
         loginFlag = LoginFlag.getInstance();
@@ -83,14 +82,10 @@ public class LoginActivity extends AppCompatActivity implements MVPView,View.OnC
     }
 
     @Override
-    public void onSuccess_announcement(Announcement announcement) {
+    public void onSuccess_inform(Inform inform) {
 
     }
 
-    @Override
-    public void onSuccess_notice(Notice notice) {
-
-    }
 
     @Override
     public void onSuccess_schedule(Schedule schedule) {
